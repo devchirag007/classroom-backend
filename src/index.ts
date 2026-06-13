@@ -1,8 +1,13 @@
+import AgentAPI from "apminsight"
+AgentAPI.config()
+
 import express from "express"
-import subjectsRouter from "./routes/subjects"
 import cors from "cors"
 import { toNodeHandler } from "better-auth/node"
-import { auth } from "./lib/auth"
+
+import subjectsRouter from "./routes/subjects.js"
+import { auth } from "./lib/auth.js"
+
 
 const app = express()
 const port = 8000
