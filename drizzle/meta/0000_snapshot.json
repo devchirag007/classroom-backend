@@ -1,5 +1,5 @@
 {
-  "id": "e7217b07-2a92-46de-815d-510cb60a64c0",
+  "id": "5be64984-733c-4adb-b125-ff87d0f4e90d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -12,7 +12,18 @@
           "name": "id",
           "type": "integer",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "classes_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
         },
         "subject_id": {
           "name": "subject_id",
