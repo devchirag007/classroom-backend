@@ -1,6 +1,6 @@
 import express from "express"
 import { db } from "../db/index.js"
-import { classes, subjects, user } from "../db/schema/index.js"
+import { classes, departments, subjects, user } from "../db/schema/index.js"
 import { and, desc, eq, getTableColumns, ilike, or, sql } from "drizzle-orm"
 
 const router = express.Router()
@@ -58,6 +58,30 @@ router.get("/", async (req, res) => {
         res.status(500).json({ error: 'Failed to get classes' })
     }
 })
+
+router.get("/:id", async (req, res) => {
+    const classId = Number(req.params.id)
+
+    const [classDetails] = await db
+        .select({ ...getTableColumns(classes), subject: { ...getTableColumns(subjects) }, teacher: { ...getTableColumns(user) }, department: { ...getTableColumns(departments) } })
+        .from(classes)
+        .leftJoin(subjects, eq(subjects.id, classes.subjectId))
+        .leftJoin(user, eq(user.id, classes.teacherId))
+        .leftJoin(departments, eq(departments.id, subjects.departmentId))
+        .where(eq(classes.id, classId))
+
+    if (!classDetails) {
+        res.status(404).json({ error: "Class not found" })
+    }
+
+    res.status(200).json({ data: classDetails })
+
+    if (!Number.isFinite(classId)) {
+        res.status(400).json({ error: "No Class Found" })
+    }
+
+})
+
 
 router.post("/", async (req, res) => {
     try {
